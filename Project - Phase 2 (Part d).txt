@@ -1,0 +1,148 @@
+*****Authentication vs Authorization*****
+ 
+  Authentication
+  
+  Authentication is the process of verifying who someone is 
+ 
+  Authorization
+ 
+  Authorization is the process of verifying what specific applications , files and data a user has access to
+
+
+
+
+
+
+*****How are Passwords To?*****
+
+ Storing Passwords
+ 
+ We NEVER store the passwords as it is. We store their hashed form.
+
+ password                                           how it is started
+                                 Hashing              
+ "helloworld"                      Function          "278947328duhc34y2888y3u328yhxy48u2dh8"
+
+
+
+
+
+
+*****What is Hashing?*****
+
+ What we need to know?
+ 
+ For every input , there is a fixed output. They are one way functions ,, we can't get input from output. For different input ,  there is a different output but of same length. Small changes in input should bring large changes in output.
+
+a9993e364706816aba3e25717850c26c9cd0d89d 
+
+
+
+
+
+
+*****What is Salting*****
+
+ Password salting is a technique to protect passwords stored in databases by adding a string of 32 or more characters and then hashing them. 
+
+ex- salt = "%?@"
+    abc => abc%?@ => hashed form
+    helloworld => helloworld%?@ => hashed form
+
+
+
+
+*****Passport - Getting Started*****
+
+ npm i passport
+
+ npm i passport-local
+
+ npm i passport-local-mongoose
+
+
+
+
+
+*****User Model*****
+
+ user:username,password,email
+
+ You're free to define user how you like . Passport-Local Mongoose will add a username , hash and salt field to store the username ,, the hashed password and the salt value.
+ 
+ Additionally , Passport-Local Mongoose adds some methods to your schema .
+
+
+
+
+
+
+*****Configuring Strategy*****
+
+ passport.initialize()
+
+ A middleware that inintializes passport.
+
+ passport.session()
+
+ A web application needs the ability to identify users as they browse from page to page. The series of requests and responses , each associated with the same user ,  is known as a session.
+
+ passport.use(new LocalStrategy( User.authenticate() ))
+
+
+
+
+
+
+*****Demo User*****
+
+ app.get("registerUser" , async (req , res) => {
+  let fakeUser = new User({
+   email: "student@gmail.com" , 
+   username: "delta-student" , 
+   });
+   let newUser = await User.register(faakeUser  , "helloworld");
+   res.send(newUser);
+  });
+
+
+
+
+
+
+*****Signup User-GET******
+
+GET /signup => signup form
+                  ||
+                  \/
+             POST /signup 
+
+
+
+
+******SignUp User - POST*****
+router.post("/signup" , wrapAsync(async (req , res) => {
+    try {
+        let {username , email , password} = req.body;
+        const newUser = new User({email , username});
+        const registeredUser = await User.register(newUser , password);
+        console.log(registeredUser);
+        req.flash("success" , "user is registered!");
+        res.redirect("/listings");
+    } catch(e) {
+        req.flash("error" , e.message);
+        res.redirect("/signup");
+    }
+  
+}))
+
+
+
+
+
+*****Login User****
+ 
+ GET /login => form
+               ||
+               \/
+           POST /login

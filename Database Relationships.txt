@@ -1,0 +1,230 @@
+*****SQL Relationships (One to One)*****
+              
+  Relationships
+ SQL( via Foreign Keys)
+ -one to one
+ -one to many
+ -many to many
+
+One to One :
+-In SQL, a one-to-one relationship is a type of relationship between two tables where each row in the first table is linked to one and only one row in the second table, and vice versa. This relationship is relatively rare in relational database design because it's often more efficient to combine such tables into a single table. However, there are cases where one-to-one relationships are useful, such as separating frequently accessed data from infrequently accessed data for performance reasons or maintaining security and privacy.
+
+
+
+*****SQL Relationships (One to Many & Many to Many)*****
+  
+ One to Many:-
+ A one-to-many relationship occurs when a single row in one table is related to multiple rows in another table. This type of relationship is the most common in relational databases.
+
+Example
+Consider a database for a blog platform with two tables: Authors and Posts. Each author can write multiple posts, but each post is written by only one author.
+
+ Many to Many:-
+ A many-to-many relationship occurs when multiple rows in one table are related to multiple rows in another table. This is implemented using a junction table (also known as a join table or associative table).
+
+Example
+Consider a database for a course management system with three tables: Students, Courses, and Enrollments. Each student can enroll in multiple courses, and each course can have multiple students.
+
+
+
+
+******One to Few(in detail)*****
+  Mongo Relationships
+  One to Many / Approach 1 (one to few)
+        ||
+====================================
+||                                   ||                                 ||
+(2,3,100,                    (1k , 2k ,                           (10^7,10^8,
+500)                            10k)                                 10^9)
+  store the child document inside parent        user(parent) ========> Address(child)
+
+     {
+       -id: ObjextId("667bd4adbbaf1cb82d51a9e3"),
+        username: 'sherlockholmes',
+         addresses: [
+              { location: '221B Baker Street' , city 'London'},
+             {location: 'P36 Downtown' , city: 'London' }
+               ],
+          __v:1
+        }},
+
+
+
+
+
+*****One to Few (Implementation)*****
+// One to Few (Implementation)
+const mongoose = require("mongoose");
+const {Schema} = mongoose;
+
+main()
+.then(() => console.log("Connection Successful"))
+.catch((err) => console.log(err))
+async function main() {
+  await mongoose.connect('mongodb://127.0.0.1:27017/relationDemo');
+
+  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+}
+
+const userSchema = new Schema({
+    username: String,
+    addresses: [
+        {
+            _id: false ,
+            location: String,
+            city: String,
+        },
+    ],
+})
+
+const User = mongoose.model("user" , userSchema);
+
+const addUsers = async() => {
+    let user1 = new User({
+        username: "sherlockholmes",
+        addresses: [{
+            location: "221B Baker Strret",
+            city: "London"
+        }]
+    })
+    user1.addresses.push({location: "P32 WallStreet" , city: "London"});
+    let result = await user1.save();
+    console.log(result);
+    // await user1.save();
+}
+
+addUsers();
+
+here to avoid making the id of addresses we can write _id: false to avid making any id for addresses in schema.
+
+
+
+
+
+*****One to Many(in Detail)***** 
+ Mongo Relationships
+ One to Many | Approach 2
+ Store a reference to the child document inside parent
+              ||
+              \/
+            pointer
+ {
+    -id: ObjectId("667bd4adbbaf1cb82d51a9e3"),
+     name: "Rahul Kumar",
+      orders:  [
+        ObjectId("667bd4adbbaf1cb82d51a9e4"),
+        ObjectId("667bd4adbbaf1cb82d51a9e5")
+],
+--v: 0
+}
+
+
+
+
+*****One to Many(Implementation)*****
+// One to Many (implemntation)
+const mongoose = require("mongoose");
+const {Schema} = mongoose;
+
+main()
+.then(() => console.log("Connection Successful"))
+.catch((err) => console.log(err))
+async function main() {
+  await mongoose.connect('mongodb://127.0.0.1:27017/relationDemo');
+
+  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+}
+
+const orderSchema = new Schema({
+    item: String,
+    price: Number,
+})
+
+const Order = mongoose.model("Order" , orderSchema);
+
+const customerSchema = new Schema({
+    name: String,
+    orders: [
+        {
+        type: Schema.Types.ObjectId,
+        ref: "Order"
+    }
+    ]
+})
+
+// const addOrders = async () =>{
+//     let res = await Order.insertMany([
+//     {item: "Samosa" , price: 20},
+//     {item: "Chips" , price: 10},
+//     {item: "Chocolate" , price: 40}
+// ]);
+//    console.log(res);
+// }
+
+// addOrders();
+
+here , to save the id we write the syntax as Schema.Types.ObjectId and another field we have to write in our syntx is ref which describes the collection of which id we are storing.
+
+
+
+
+*****Using Populate*****
+
+ One to Many (Populate)
+ 
+ const find = async () => {
+      let res = await Customer.findOne({ name: "Rahul Kumar" }).populate("orders");
+      console.log(res);
+};
+     find();
+
+ Population is the process of automatically replacing the specified paths in the document with document(s) from other collection(s). We may populate a single document, multiple documents, a plain object, multiple plain objects, or all objects returned from a query. Let's look at some examples.
+
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const personSchema = Schema({
+  _id: Schema.Types.ObjectId,
+  name: String,
+  age: Number,
+  stories: [{ type: Schema.Types.ObjectId, ref: 'Story' }]
+});
+
+const storySchema = Schema({
+  author: { type: Schema.Types.ObjectId, ref: 'Person' },
+  title: String,
+  fans: [{ type: Schema.Types.ObjectId, ref: 'Person' }]
+});
+
+const Story = mongoose.model('Story', storySchema);
+const Person = mongoose.model('Person', personSchema);
+
+
+
+
+*****One to Squlions (in Detail)*****
+ Mongo Realtionships
+ One too Many / Approach 3 (one to squillions)
+ Store a refernce to the parent document inside child
+   
+  {
+    _id: ObjectId('667d45494d08a448f1b443f1'),
+    content: 'Hello World' ,
+    likes: 7,
+    user: ObjectId('667d4a9f62c8ee1f60e096fb'),
+    __v: 0
+},
+  {
+   _id: ObjectId('667d45494d08a448f1b443f2')
+  content: 'Bye Bye' ,
+   likes: 23,
+   user: ObjectId('667d4a9f62c8ee1f60e096fb'),
+   __v: 0
+  },
+
+
+
+
+
+*****Reading Docs*****
+for the detail notes of this chapter refer:- https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design

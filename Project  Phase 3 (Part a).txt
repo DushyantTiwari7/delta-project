@@ -1,0 +1,134 @@
+*****MVC - Model , View , Controller*****
+   Implement Design Pattern for Listings. It will not create anything in our project but it is the way to write our code.
+   here we have used model folder to store the database code , Views folder to save the frontend related fles and now we will use     Controller folder to save backend related files.
+ Routes is the folder which gives the info of which route is performing which function n like get , put , delete and  patch but controllers folder gives the info of the algo of how at the core the routes are getting function.
+
+
+
+
+******MVC for Listings*****
+
+
+
+
+
+*****MVC for reviews & Users****
+  Implement Design Pattern for Reviews & Users
+
+
+
+
+*****Router.route*****
+ A way to group together routes with different verbs but same paths
+ 
+ router.route('/users/:user_d')
+ .all(function (req , res . next) {
+   // runs for all HTTP ebs first
+  // think of it as route specific middlewre!
+   next()
+})
+.get(function (req , res , next) {
+ res.join(req iuser)
+})
+.put(function (req , res , next) {
+ // just an example of mybe updating the user
+ req.user.nme = req.prams.name
+  // save user ... etc
+  req.json(req.user)
+})
+.post(function (req , res , next) {
+ next(new Error('not implemented'))
+})
+.delete(function (req , res , next) {
+ next9new Error('not ijmplemented'))
+})
+
+
+
+
+*****Re-style Ratings*****
+
+
+
+
+
+
+
+*****Image Upload****
+While uploading any image while creating a new listing , which are:-
+ 1. Send Files
+ 2. Size limit
+To resolve this issue we need to :
+ 1. make form capable of sending files
+ 2. we cannot use mongodb to store file images due to size constraints ,  we can use free 3rd party service.                                          ||
+                                 \/
+                          URL link
+ 3. Save this link in mongo
+
+
+
+
+
+
+
+*****Manipulation Form****
+ enctype="multipart/form-data"
+ 
+ <div class=mb-3">
+      <label for="image" class="form-label">Uplaod Image<label>
+      <input name="listing[image]" type="file" class="form-control" />
+ <div>
+
+
+
+
+*****Cloud Setup*****
+Cloudinary & .env file
+                        \/
+environment variables/credentials
+
+they are in the format of KEY=value 
+Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env
+
+Use "npm i dotenv" to install the dotenv package.
+
+if(process.env.NODE_ENV != "production") {
+  require('dotenv').config();
+   
+}
+use this code to protect our code credential to get leaked since it is now in development phase once it is completed and it is set to production phase(when it is ready) we will not use .env
+
+
+
+*****Store Files*****
+Multer Store Cloudinary
+
+npm i cloudinary multer-storage-cloudinary
+
+Cloudinary Node SDK
+The Cloudinary Node SDK allows you to quickly and easily integrate your application with Cloudinary. Effortlessly optimize, transform, upload and manage your cloud's assets.
+ use "npm i cloudinary" to store cloudinary package.
+
+Multer Storage Cloudinary
+A multer storage engine for Cloudinary.
+Use "npm install multer-storage-cloudinary" to install this package.
+
+
+*****Save Link in Mongo*****
+Modify Image Schema
+
+{
+ _id: ObjectId("463dhug3y7gd283g8"),
+ title: "Villa",
+ description: "Great Place" ,
+ image: {
+         url: 'https://example.com",
+         filename: 'Delta/image'
+},
+price: 2500,
+location: 'Caifornia',
+country: 'US' ,
+reviews: [],
+owner: ObjectId("463dhug3y7gd283g8"),
+__v: 0
+}

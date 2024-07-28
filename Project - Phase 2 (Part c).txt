@@ -1,0 +1,171 @@
+*****What is State*****
+  Stateful Protocol
+  Stateful Protocol require to save the status and session information.
+   e.g.-  ftp
+ 
+  Stateless Protocol
+  Stateless Protocol does not require the server to retain the server information or 
+  e.g. - http
+
+
+
+
+
+*****Express Sessions*****
+
+ An attempt to make our session tasteful
+
+    Server Side                                 Client Side
+        ||                                          ||
+        \/                                         \/
+     user1    ================>                   101
+ sesionid : {
+(101)         item: laptop
+               item: charger
+           }
+
+
+       user 2    =================>               102
+   sessionid: {
+   (102)      item: shirt
+               item:pants
+             }
+
+
+
+
+*****Exploring Session Options*****
+
+ Express Sessions
+ using npm ackage
+
+  app.use(
+     session({
+        secret: "mysupersecretcode" ,
+        resave: false,
+        saveUninitialised: true,
+           })
+     );
+
+
+
+
+
+*****Storing & Using Session Info*****
+
+ Express Sessions
+ Storing & Using Info
+
+ app.get("/register" , (req , res) => {
+    let {name = "anonymous "} = req.query;
+    req.session.name = name;
+    // console.log(req.session.name)
+    // res.send(name);
+    res.redirect("/hello");
+ })
+
+ app.get("/hello" , (req , res) => {
+    res.send(`Hello , ${req.session.name}`)
+ })
+
+
+
+
+
+
+******Using connect-flash*****
+
+ connect-flash
+ The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user.  The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered.
+
+
+
+
+
+
+*****Using res.locals*****
+
+ res.local
+
+ app.use((req , res , next) => {
+  res,locals.message = req.flash("success");
+  next();
+  });
+
+ Use this property to set variables accessible in templates rendered with res.render. The variables set on res.locals are available within a single request-response cycle, and will not be shared between requests.
+
+
+
+
+
+
+
+*****Imlementing Sessios In Project*****
+const session = require("express-session");
+
+
+const sessionOptions = {
+  secret: "mysupersecretfile",
+  resave: false,
+  saveUnitialized: true,
+}
+
+
+
+
+
+
+*****Cookie in SessionOptions*****
+
+  Using Sessions
+  Adding Cookie Options
+
+  const sessionOptions = {
+   secret: "mysecretcode" , 
+   resave: false,
+   saveunitialised: true,
+    cookie: {
+    expires: Date.now() + 1000*60*60*24*3,
+    maxAge: 1000 * 60 * 60 * 24* 3,
+    httpOnly; true
+    },
+   };
+
+
+
+
+
+
+*****Implementing Flash In Project*****
+
+  Using Flash
+
+  
+
+
+
+
+
+
+******Flash Success Includes****
+
+   Using Flash
+   Success Partial
+
+
+
+
+
+*****Flash Failures Includes****
+
+
+
+
+
+
+
+
+
+
+
+

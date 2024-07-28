@@ -1,0 +1,96 @@
+*****Creating Boilerplate*****
+What is EJS Mate?
+It helps in creating the templates that are required almost in all the pages like navbar and footer.
+
+for this write the simple code inside boilerplate.ejs.Make boilerplate.ejs inside layouts folder(layouts folder should be inside views). Inside boilerplate.ejs , make class named as container and use the syntax <%- body %>
+
+
+
+
+******NavBar*****
+Require navbar through the Bootstrap.
+
+
+
+
+*****Footrer*****
+The CSS properties display: flex, align-items: center, and justify-content: center are used to control the layout and alignment of elements within a container. Here's a breakdown of what each property does:
+
+display: flex
+This property sets the container to use a flexbox layout model. The flexbox layout is a powerful tool for creating responsive and flexible layouts. When you apply display: flex to a container, its direct children become flex items, which can be aligned and distributed within the container in various ways.
+
+align-items: center
+This property aligns the flex items along the cross axis (the vertical axis in a row direction or the horizontal axis in a column direction). When align-items: center is applied, all flex items inside the container will be centered along the cross axis. This means:
+
+If the flex direction is row (default), the items will be vertically centered.
+If the flex direction is column, the items will be horizontally centered.
+justify-content: center
+This property aligns the flex items along the main axis (the horizontal axis in a row direction or the vertical axis in a column direction). When justify-content: center is applied, all flex items inside the container will be centered along the main axis. This means:
+
+If the flex direction is row (default), the items will be horizontally centered.
+If the flex direction is column, the items will be vertically centered.
+Combined Effect
+When these properties are combined, they center the flex items both horizontally and vertically within the flex container. Here's how it works in practice:
+
+display: flex: The container becomes a flex container, and its children become flex items.
+align-items: center: The flex items are vertically centered within the flex container.
+justify-content: center: The flex items are horizontally centered within the flex container.
+This combination ensures that the flex items are placed in the middle of the container both horizontally and vertically.
+
+Example
+Here's an example to illustrate how these properties work together:
+
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Centering</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            border: 1px solid black;
+        }
+        .item {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item">Centered</div>
+    </div>
+</body>
+</html>
+In this example:
+
+The .container is a flex container with a height of 200px.
+The .item inside the container is a flex item.
+The flex item is centered both vertically and horizontally within the container due to the combined effect of display: flex, align-items: center, and justify-content: center.
+Conclusion
+By using these flexbox properties, you can easily center content within a container, making your layout more flexible and responsive. This approach is widely used in modern web design to achieve clean and centered alignments without relying on older, more complex layout techniques.
+
+
+
+
+
+
+*****Styling Index*****
+<a> 
+     |                  |
+     |   card      |  <= click -> show
+     |                  |
+     |                  |
+</a>
+
+
+
+
+*****Styling Edit List*****

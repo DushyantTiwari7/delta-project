@@ -1,0 +1,106 @@
+*****Handling Deletion*****
+using Mongoose Middleware 
+
+ We can use 2 middleware :
+ * Pre-run before query is executed
+ * Post-run after query is executed
+
+ customerSchema.post("findOneAndDelete" , asunc (customer) => {
+    if (custpmer.oeders.length) {
+      let res = await Order.deleteMany({_id: { $in: customer.orders } });
+     console.log(res);
+    }
+   })
+
+
+
+
+
+*****Mongoose Middlewares*****
+
+ findByIdAndDelete
+         ||
+         \/
+  findOneAndDelete
+           ||
+           \/
+    mongoose middlware
+
+
+
+
+*****Creating Review Model*****
+ New Model: Reviews
+ -comment
+ -rating(1 to 5)
+ - craetedAt
+ we will create reviews model inside models folder
+
+
+
+
+*****Create Reviews (Step 1)*****
+ Create Reviews
+ 1. Setting up the Reviews Form
+
+
+
+
+*****Create Reviews*****
+2. Submitting the Form  => review add                              listing add
+                                                                                  POST /listings
+                                                                                   POST/reviews
+
+ POST /listings/:id/reviews
+                       /\
+                       ||
+                  listing id
+
+
+
+
+*****Validation For Reviews*****
+1. Client side validation (form)
+2. Server (joi)
+      -joi schema
+           ||
+           \/
+        -schema validate function
+            ||
+            \/
+          -middleware
+
+
+
+
+*****Render Reviews*****
+    Render Reviews
+            ||
+            \/
+     show listing
+
+
+
+
+
+*****Styling Reviews*****
+      Adding Style
+          ||
+          \/
+        Card
+
+
+
+
+****Deleting Reviews****
+  Deleting Reviews => delete button => /listings/:id/reviews/:reviewId
+   Mongo $oull operator
+    $pull
+           The $pull operator removes from an existing array all instances of a value or values that match a specified condition.
+
+
+
+
+
+*****Deleting Listing*****
+Delete Middleware for Reviews

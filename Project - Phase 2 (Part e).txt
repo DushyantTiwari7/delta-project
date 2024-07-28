@@ -1,0 +1,145 @@
+*****Connecting Login Route*****
+
+ How to check if User Logged in?
+
+ req.isAuthenticated()  // Passport method
+
+
+
+
+
+
+*****LogOut User*****
+
+ GET /logout
+
+ router.get("/logout" , (req , res) => {
+     req.logout((err) => {
+          if(err) {
+                return next(err);
+              }
+            req.flash("success" , "logged you out!");
+             res.redirect("/listings");
+          });
+  });
+
+
+
+
+
+
+
+*****Add Styling*****
+                           req.user
+                             ||
+        =============================================
+        ||                                          ||
+        \/                                          \/
+undefined( not logged in)                    object (logged in)
+        ||                                          ||
+        \/                                          \/
+    sign up ; log in                              log out 
+
+
+
+
+
+
+
+*****Login After Signup*****
+
+ Passport's login method automatically establishes a login session.
+
+ We can invoke login to automatically login a user.
+
+ req.login(registeredUser , (err) => {
+     if(err) {
+       next(err);
+       }
+    req.flash("success" , "Welcome to Wanderlust");
+    req.redirect("/listings");
+});
+
+Log In
+
+Passport exposes a login() function on req (also aliased as logIn()) that can be used to establish a login session.
+
+req.login(user, function(err) {
+  if (err) { return next(err); }
+  return res.redirect('/users/' + req.user.username);
+});
+
+When the login operation completes, user will be assigned to req.user.
+
+Note: passport.authenticate() middleware invokes req.login() automatically. This function is primarily used when users sign up, during which req.login() can be invoked to automatically log in the newly registered user.
+
+Log Out
+
+Passport exposes a logout() function on req (also aliased as logOut()) that can be called from any route handler which needs to terminate a login session. Invoking logout() will remove the req.user property and clear the login session (if any).
+
+It is a good idea to use POST or DELETE requests instead of GET requests for the logout endpoints, in order to prevent accidental or malicious logouts.
+
+app.post('/logout', function(req, res, next){
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+});
+
+
+
+
+
+
+*****post-Login Page*****
+
+       ||
+       \/
+      path========
+       ||         ||
+       \/        ||
+     login     ||
+       ||         ||
+       \/        \/
+      path (redirect Url)
+
+
+
+
+
+
+
+*****Listing Owner*****
+
+  listing       =>        owner
+    
+
+
+
+
+*****Starting with Authorization****
+ hide delete and edit buttons for the uses which are not its owners.
+
+before giving authorization we should be knowing following two ythings: -
+ 1. listing owner
+ 2. edit/ delete user
+
+
+
+
+
+
+*****Authorization for /listings*****
+ 
+
+
+
+
+*****Authorization for /reviews (part1)*****
+ Setting Authorization
+  For Review  :-   1. Review => (author , owner , created by)
+       
+
+
+
+*****Authorization for /reviews(part2)*****

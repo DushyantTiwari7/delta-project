@@ -1,0 +1,200 @@
+*****Error Handling Middleware*****
+Error Handlers
+Custom 
+
+Error handling Middleware
+
+app.use((err, req,res , next) => {
+   console.log("------ERROR----");
+   next(err);
+});
+
+Writing error handlers
+Define error-handling middleware functions in the same way as other middleware functions, except error-handling functions have four arguments instead of three: (err, req, res, next). For example:
+
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+
+error handling middleware
+             ||
+             \/
+         next()
+             ||
+             \/
+next non-error handling
+otherwise we have to assign err inside next as follows next(err) to go to next error handler.
+
+
+
+
+*****Custom Error Class*****
+Custom
+
+  class ExpressError extends Error {
+     constructor(status , message) {
+       super();
+       this.status = status;
+        this.message = message;
+  }
+}
+
+
+to learn more about status codes visit :- https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
+
+
+
+
+*****Default Status & Message*****
+Custom
+
+  app.use((err, req , res , next ) => {
+    let {status = 500 , message = "SOME ERROR" } = err;
+    res.send(status).send(message);
+});
+
+What is a Class?
+A class is like a blueprint or template for creating objects. It defines a set of properties and methods that the objects created from the class will have. Think of it like a recipe for baking a cake. The recipe (class) itself is not a cake, but it tells you how to make cakes (objects).
+
+In JavaScript, you can define a class using the class keyword. Here's a simple example:
+
+javascript
+Copy code
+class Car {
+    constructor(make, model, year) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    }
+
+    startEngine() {
+        console.log("Vroom! The engine has started.");
+    }
+}
+In this example:
+
+Car is a class.
+It has a constructor method that initializes the properties make, model, and year.
+It has a method called startEngine that prints a message.
+What is an Object?
+An object is an instance of a class. It is created from the class and has the properties and methods defined by the class. If the class is the blueprint, then the object is the actual item created from the blueprint.
+
+Using the Car class example, you can create objects like this:
+
+javascript
+Copy code
+const myCar = new Car('Toyota', 'Corolla', 2021);
+const yourCar = new Car('Honda', 'Civic', 2020);
+In this example:
+
+myCar and yourCar are objects created from the Car class.
+Each object has its own set of properties (make, model, year).
+You can call the startEngine method on these objects:
+javascript
+Copy code
+myCar.startEngine(); // Outputs: "Vroom! The engine has started."
+yourCar.startEngine(); // Outputs: "Vroom! The engine has started."
+Key Differences Between Class and Object
+Definition vs. Instance:
+
+Class: Defines properties and methods. It's a blueprint.
+Object: An instance created from the class. It's a specific example with actual values.
+Usage:
+
+Class: Used to define the structure and behavior of objects.
+Object: Used to perform operations and store data defined by the class.
+Existence:
+
+Class: Exists as a definition or template.
+Object: Exists as a concrete entity in memory with specific values.
+Analogies to Make It Clearer
+Class: Blueprint of a house.
+
+Object: Actual house built from that blueprint.
+
+Class: Recipe for a cake.
+
+Object: Actual cake made following the recipe.
+
+By understanding that a class is a template and an object is a specific instance of that template, you can better grasp how they work together in programming to help you create and manage complex data structures and behaviors in an organized way.
+
+the default error handler will search first err.status inside code amd if we have manually provide some error that is outside the range code f 400 and 500 then it will set the error by default to 500.
+
+for more info visit :-https://expressjs.com/en/guide/error-handling.html
+
+
+
+
+*****Activity*****
+Error Class
+Create an admin route & send an error with a 403 status code.
+                 /admin
+                    ||
+                    \/
+               Error (403)
+
+
+
+
+*****Handling Async Errors*****
+
+   // NEW - Show Route
+   app.get("/chats/:id" , async (req, res , next) => {
+   let { id } = req.params;
+   let chat = await Chat.findById(id);
+   if(!chat) {
+        return next(new ExpressError(404 , "Chat not Found or Deleted"));
+    }
+    res.render("edit.ejs" , {chat});
+});
+
+-if we give error inside as throw new ExpressError(404 , "Chat not Found")); then it will not give us the message as "Chat not Found" in asynchronous error but it will give some random error also it will not run by default next() function. 
+-For that we have to explicitly write next and inside it new ExpressError(404 , "Chat Not Found"))); to get the error as "Chat not Found" .
+-The same thing is not applicable to the function which are not asynchronous there we can get the desired error by simply running the line as throw new ExpressError(404 , "Chat not Found").
+
+
+
+
+*****Using try & Catch*****
+There are two types of errors :-
+1. id  2. validation Error - based on violations of rules
+
+
+
+
+
+*****Using wrapAsync*****
+
+Untill now we saw following methods to detect the error:-
+1. Normal Error 
+2. Async => Express Error
+3. Try-catch (bulky way to write the error code).
+4.async wrap => wrap the callback (now which we are doing)
+
+function wrapAsync  (fn) {
+  return function (req, res ,next) {
+   fn(req,res,next).catch(err);
+}
+}
+
+
+
+
+
+*****Mongoose Errors*****
+  
+  const handleValidationErr = (err) => {
+     console.log("Validation error occurred");
+      return err;
+};
+
+app.use((err , req , res ,next) => { 
+     console.log(err.name);
+     if(err.name === "ValidationError") {
+   err= handleValidationErr(err);
+    }
+    next(err);
+});
+
+
